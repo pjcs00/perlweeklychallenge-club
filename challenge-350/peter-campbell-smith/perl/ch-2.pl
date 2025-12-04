@@ -17,8 +17,8 @@ shuffle_pairs(1030, 1130, 1);
 sub shuffle_pairs {
 	
 	my ($from, $to, $count, $A, $B, $a_sorted, $b_sorted, 
-		$b_max, $witness, %results, %occurs, %legend, 
-		$output, $explain);
+		$b_max, $witness, %occurs, %legend, $output, 
+		$explain);
 	
 	# initialise
 	 ($from, $to, $count) = @_;
@@ -38,20 +38,14 @@ sub shuffle_pairs {
 			$b_sorted = join('', sort(split('', $B)));
 			if ($a_sorted eq $b_sorted) {
 				$occurs{$A} ++;
-				$results{$A} .= qq[$witness,$B; ];
+				$legend{$A} .= qq[ * $witness = $B;];
 			}
 		}	 
 	}
 	
 	# report
-	for $A (keys %results) {
-		while ($results{$A} =~ m|(\d+),(\d+);|g) {
-			($witness, $B) = ($1, $2);
-			$legend{$A} .= qq[ * $witness = $B;];
-		}
-	}
 	$output = 0;
-	for $A (keys %occurs) {
+	for $A (keys %legend) {
 		next unless $occurs{$A} >= $count;
 		$output ++;
 		$explain .= qq[$A] . substr($legend{$A}, 0, -1) . 
